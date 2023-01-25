@@ -15,5 +15,13 @@ const showWord = function(word) {
     numbers.splice(wordLength, (40-wordLength));
     wordProgress.innerText = numbers.join("");
 };
-    
+
 showWord(word);
+    
+guessButton.addEventListener("click", function(e) {
+    e.preventDefault();
+    inputLetter = letterInput.value;
+    console.log(inputLetter);
+    letterInput.value = "";
+});
+
