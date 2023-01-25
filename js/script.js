@@ -11,7 +11,9 @@ const word = "magnolia";
 
 const showWord = function(word) {
     const wordLength = word.length;
-       
-}
-
+    const numbers = ["●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●"]
+    numbers.splice(wordLength, (40-wordLength));
+    wordProgress.innerText = numbers.join("");
+};
+    
 showWord(word);
