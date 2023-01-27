@@ -29,8 +29,10 @@ guessButton.addEventListener("click", function(e) {
     letterInput.value = "";
     const returnLetter = valInput(inputLetter);
     if (returnLetter !== undefined) {
-        makeGuess(returnLetter);
-    };
+        upperLetter = returnLetter.toUpperCase();
+        makeGuess(upperLetter);
+        wordUpdate(guessedLetterArray);
+    }; 
 });
 
 const valInput =  function(inputLetter) {
@@ -48,24 +50,46 @@ const valInput =  function(inputLetter) {
     };
 };
 
-const makeGuess = function(letter) {
+const makeGuess = function(upperLetter) {
     // adds the new guessed letter to the array
-    letter = letter.toUpperCase();
-    if (guessedLetterArray.includes(letter) === true) {
+    if (guessedLetterArray.includes(upperLetter) === true) {
         message.innerText = "You already guessed this letter before, try a new letter.";
     } else {
-        guessedLetterArray.push(letter);
+        guessedLetterArray.push(upperLetter);
         updateGuess();
-        console.log(guessedLetterArray);
     }
 };
 
 const updateGuess = function() {
-    wordProgress.innerHTML = "";
+    guessedLetters.innerHTML = "";
     for (let item of guessedLetterArray) {
         let li = document.createElement("li");
         li.innerText = item;
         guessedLetters.append(li);
     };
 };
+
+const wordUpdate = function(guessedLetterArray) {
+    wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const guessedWordArray = [];
+    for (const letter of wordArray) {
+        if (guessedLetterArray.includes(letter)) {
+        guessedWordArray.push(letter.toUpperCase());
+        } else {
+        guessedWordArray.push("●");
+        }   
+    };
+    wordProgress.innerText = guessedWordArray.join("");
+    playerWins(wordProgress, wordUpper);
+};
+
+const playerWins = function(wordProgress, wordUpper) {
+    if (wordProgress.innerText === wordUpper) {
+        message.classList.add("win");
+        message.innerHTML = `<p class="highlight">You guessed the word correct! Congrats!</p>`;
+    }
+}
+
+
 
