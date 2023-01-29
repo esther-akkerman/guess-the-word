@@ -8,7 +8,7 @@ const message = document.querySelector(".message");
 const againButton = document.querySelector(".play-again");
 
 let word = "magnolia";
-const guessedLetterArray = [];
+let guessedLetterArray = [];
 let remainingGuesses = 8;
 
 const getWord = async function() {
@@ -23,7 +23,7 @@ const selectRandomWord = function(wordArray) {
     const randomIndex = Math.floor(Math.random()*wordArray.length);
     const randomWord = wordArray[randomIndex];
     word = randomWord.trim();
-}
+};
 
 const showWord = function(word) {
     // placeholder for showing how far the word is guessed
@@ -107,27 +107,48 @@ const countGuesses = function(upperLetter) {
     if (!wordUpper.includes(upperLetter)) {
         message.innerText = `The word does not contain the letter ${upperLetter}.`;
         remainingGuesses -= 1;
-        console.log(remainingGuesses);
     } else {
         message.innerText = `Yes, the word contains the letter ${upperLetter}`;
     };
     if (remainingGuesses === 0) {
         message.innerText = `You lost. The word was "${word}".`;
+        startOver();
     } else if (remainingGuesses === 1) {
         guessRemain.innerText = `${remainingGuesses} guess`;
     } else {
         guessRemain.innerText = `${remainingGuesses} guesses`
     };
-}
+};
 
 const playerWins = function(wordProgress, wordUpper) {
     //checks if player won and shows styled winning message
     if (wordProgress.innerText === wordUpper) {
         message.classList.add("win");
         message.innerHTML = `<p class="highlight">You guessed the word correct! Congrats!</p>`;
+        startOver();
     }
-}
+};
 
+const startOver = function () {
+    guessButton.classList.add("hide");
+    guessRemainPar.classList.add("hide");
+    guessedLetters.classList.add("hide");
+    againButton.classList.remove("hide");
+};
+
+againButton.addEventListener("click", function() {
+    message.classList.remove("win");
+    message.innerText = "";
+    guessedLetters.innerHTML = "";
+    remainingGuesses = 8;
+    guessedLetterArray = [];
+    guessRemain.innerText = `${remainingGuesses} guesses`;
+    guessButton.classList.remove("hide");
+    guessRemainPar.classList.remove("hide");
+    guessedLetters.classList.remove("hide");
+    againButton.classList.add("hide");
+    getWord();
+});
 
 
 
