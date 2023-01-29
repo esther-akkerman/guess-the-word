@@ -9,14 +9,15 @@ const againButton = document.querySelector(".play-again");
 
 const word = "magnolia";
 const guessedLetterArray = [];
+let remainingGuesses = 8;
 
 const showWord = function(word) {
     // placeholder for showing how far the word is guessed
-    const wordLength = word.length;
-    // came up with this solution, it looks strange, but it does work. Good creative problem solving, but I think I'll learn better ways!
-    const dots = ["●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●","●"]
-    dots.splice(wordLength, (40-wordLength));
-    wordProgress.innerText = dots.join("");
+    const letterArray = [];
+    for (const letter of word) {
+        letterArray.push("●");
+    }
+    wordProgress.innerText = letterArray.join("");
 };
 
 showWord(word);
@@ -31,7 +32,7 @@ guessButton.addEventListener("click", function(e) {
     if (returnLetter !== undefined) {
         upperLetter = returnLetter.toUpperCase();
         makeGuess(upperLetter);
-        wordUpdate(guessedLetterArray);
+        wordUpdate(guessedLetterArray);   
     }; 
 });
 
@@ -56,11 +57,13 @@ const makeGuess = function(upperLetter) {
         message.innerText = "You already guessed this letter before, try a new letter.";
     } else {
         guessedLetterArray.push(upperLetter);
+        countGuesses(upperLetter);
         updateGuess();
     }
 };
 
 const updateGuess = function() {
+    // shows which letters the player already guessed
     guessedLetters.innerHTML = "";
     for (let item of guessedLetterArray) {
         let li = document.createElement("li");
@@ -70,6 +73,7 @@ const updateGuess = function() {
 };
 
 const wordUpdate = function(guessedLetterArray) {
+    //shows which letters the player guessed right and in which position of the word they are
     wordUpper = word.toUpperCase();
     const wordArray = wordUpper.split("");
     const guessedWordArray = [];
@@ -84,12 +88,32 @@ const wordUpdate = function(guessedLetterArray) {
     playerWins(wordProgress, wordUpper);
 };
 
+const countGuesses = function(upperLetter) {
+    wordUpper = word.toUpperCase();
+    if (!wordUpper.includes(upperLetter)) {
+        message.innerText = `The word does not contain the letter ${upperLetter}.`;
+        remainingGuesses -= 1;
+        console.log(remainingGuesses);
+    } else {
+        message.innerText = `Yes, the word contains the letter ${upperLetter}`;
+    };
+    if (remainingGuesses === 0) {
+        message.innerText = `You lost. The word was "${word}".`;
+    } else if (remainingGuesses === 1) {
+        guessRemain.innerText = `${remainingGuesses} guess`;
+    } else {
+        guessRemain.innerText = `${remainingGuesses} guesses`
+    };
+}
+
 const playerWins = function(wordProgress, wordUpper) {
+    //checks if player won and shows styled winning message
     if (wordProgress.innerText === wordUpper) {
         message.classList.add("win");
         message.innerHTML = `<p class="highlight">You guessed the word correct! Congrats!</p>`;
     }
 }
+
 
 
 
