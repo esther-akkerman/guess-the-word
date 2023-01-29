@@ -7,9 +7,23 @@ const guessRemain = document.querySelector("span");
 const message = document.querySelector(".message");
 const againButton = document.querySelector(".play-again");
 
-const word = "magnolia";
+let word = "magnolia";
 const guessedLetterArray = [];
 let remainingGuesses = 8;
+
+const getWord = async function() {
+    const wordRequest = await fetch("https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt");
+    const words = await wordRequest.text();
+    const wordArray = words.split("\n");
+    selectRandomWord(wordArray);
+    showWord(word);
+}; 
+
+const selectRandomWord = function(wordArray) {
+    const randomIndex = Math.floor(Math.random()*wordArray.length);
+    const randomWord = wordArray[randomIndex];
+    word = randomWord.trim();
+}
 
 const showWord = function(word) {
     // placeholder for showing how far the word is guessed
@@ -20,7 +34,7 @@ const showWord = function(word) {
     wordProgress.innerText = letterArray.join("");
 };
 
-showWord(word);
+getWord();
     
 guessButton.addEventListener("click", function(e) {
     // all functions happening when the guess button is clicked
